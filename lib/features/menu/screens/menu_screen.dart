@@ -14,7 +14,7 @@ class MenuScreen extends ConsumerStatefulWidget {
 }
 
 class _MenuScreenState extends ConsumerState<MenuScreen> {
-  final ValueNotifier<double> _slidingValue = ValueNotifier(100);
+  final ValueNotifier<double> _slidingValue = ValueNotifier(1700.0);
   final TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -62,6 +62,8 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
     required double screenHeight,
     required double screenWidth,
   }) {
+    final quantity = ref.watch(cartQuantityProvider);
+
     return Padding(
       padding: EdgeInsets.only(top: kMainPadding * 3),
       child: Row(
@@ -74,6 +76,46 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
 
           _buildSearchBar(),
           SizedBox(width: 10),
+
+          IconButton(
+            onPressed: () {},
+            icon: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 20,
+                  ),
+                  child: Icon(
+                    Icons.shopping_cart,
+                    color: AppColors.primRed3,
+                    size: 25,
+                  ),
+                ),
+                Positioned(
+                  right: 3,
+                  top: 3,
+                  child: Container(
+                    width: 25,
+                    height: 25,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(200),
+                      color: Colors.green.shade800,
+                    ),
+                    child: Center(
+                      child: Text(
+                        quantity.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primWhite,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -125,9 +167,10 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
   }
 
   Widget _buildMenuChips() {
-    return Wrap(
-      direction: Axis.horizontal,
-      spacing: 20,
+    return Row(
+      // direction: Axis.horizontal,
+      // spacing: 20,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         customButtonWidget(
           context: context,
@@ -188,7 +231,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                   Expanded(child: Divider()),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               GridView.builder(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -203,7 +246,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                 itemBuilder: (context, index) {
                   final food = data[index];
 
-                  return foodCardWidget(context: context, food: food);
+                  return foodCardWidget(context: context, food: food, ref: ref);
                 },
               ),
             ],
@@ -237,8 +280,10 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           // border: border,
           enabledBorder: border,
-          focusedBorder: OutlineInputBorder( borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(color: AppColors.primRed3, width: 2),),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide(color: AppColors.primRed3, width: 2),
+          ),
           focusedErrorBorder: border,
           hintText: "Search",
           hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
@@ -262,6 +307,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
       titleColor: AppColors.primWhite,
       leadingIcon: "assets/icons/filter.svg",
       iconColor: AppColors.primWhite,
+      width: 100,
       onTap: () {
         showDialog(
           context: context,
@@ -301,7 +347,11 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                               divisions: 1700,
                               label: value.toStringAsFixed(2),
                               onChanged: (newVal) {
+                                print("############# $newVal");
                                 _slidingValue.value = newVal;
+                                ref
+                                    .read(priceFilterProvider.notifier)
+                                    .handleValue(newVal);
                               },
                             ),
                           ],

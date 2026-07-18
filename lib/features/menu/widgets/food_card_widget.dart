@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:oneman/core/models/cart_model.dart';
+import 'package:oneman/core/providers/menu_provider.dart';
 import 'package:oneman/core/utils/colors.dart';
 import 'package:oneman/core/widgets/custom_button_widget.dart';
 
@@ -9,6 +12,7 @@ import '../models/food_model.dart';
 Widget foodCardWidget({
   required BuildContext context,
   required FoodModel food,
+  required WidgetRef ref,
 }) {
   return InkWell(
     onTap: () {
@@ -45,9 +49,7 @@ Widget foodCardWidget({
                     Expanded(
                       child: Text(
                         food.name,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyLarge!.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -103,6 +105,9 @@ Widget foodCardWidget({
                         title: "Add",
                         onTap: () {
                           print("### food adding");
+                          ref
+                              .watch(cartProvider.notifier)
+                              .addToCart(CartModel(food: food, quantity: 1));
                         },
                         trailingIcon: "assets/icons/add.svg",
                         bgColor: AppColors.primRed1,

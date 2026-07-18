@@ -7,12 +7,14 @@ Widget customButtonWidget({
   required String title,
   String? leadingIcon,
   String? trailingIcon,
+  double? width,
+  double? height,
   required VoidCallback onTap,
   Color bgColor = AppColors.primWhite,
   Color iconColor = AppColors.primDark,
   Color titleColor = AppColors.primDark,
   Color borderColor = AppColors.primGrey,
-  Color tappingColor = AppColors.primGrey
+  Color tappingColor = AppColors.primGrey,
 }) {
   return Material(
     borderRadius: BorderRadius.circular(100),
@@ -24,15 +26,16 @@ Widget customButtonWidget({
       ),
       onTap: onTap,
       child: Ink(
-        width: 90,
-        padding: EdgeInsets.symmetric(vertical: 5),
+        width: width,
+        height: height,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(100),
           border: Border.all(color: borderColor),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             if (leadingIcon != null)
               Padding(
@@ -44,6 +47,7 @@ Widget customButtonWidget({
               style: Theme.of(
                 context,
               ).textTheme.labelSmall!.copyWith(color: titleColor),
+              overflow: TextOverflow.ellipsis,
             ),
             if (trailingIcon != null)
               Padding(
