@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oneman/core/router/router.dart';
 import 'package:oneman/core/utils/app_theme.dart';
-import 'package:oneman/features/menu/screens/menu_screen.dart';
 
 void main(){
   runApp(ProviderScope(child: MyApp()));
@@ -12,11 +12,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: "Oneman",
       theme: AppTheme.lightTheme,
-      home: MenuScreen(),
+     routerConfig: AppRouter.router,
     );
   }
 }

@@ -12,6 +12,7 @@ Widget customButtonWidget({
   Color iconColor = AppColors.primDark,
   Color titleColor = AppColors.primDark,
   Color borderColor = AppColors.primGrey,
+  Color tappingColor = AppColors.primGrey
 }) {
   return Material(
     borderRadius: BorderRadius.circular(100),
@@ -19,7 +20,7 @@ Widget customButtonWidget({
     child: InkWell(
       borderRadius: BorderRadius.circular(100),
       overlayColor: WidgetStatePropertyAll(
-        AppColors.primRed1.withValues(alpha: 0.1),
+        tappingColor..withValues(alpha: 0.3),
       ),
       onTap: onTap,
       child: Ink(

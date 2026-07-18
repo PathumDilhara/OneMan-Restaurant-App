@@ -19,5 +19,13 @@ class AppTheme {
       labelSmall: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
     ),
     scaffoldBackgroundColor: AppColors.primScaffoldBg,
+
+    appBarTheme: AppBarTheme(
+      backgroundColor: AppColors.primScaffoldBg,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      toolbarHeight: 80,
+      iconTheme: IconThemeData(color: AppColors.primRed3)
+    ),
   );
 }

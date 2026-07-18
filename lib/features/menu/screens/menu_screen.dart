@@ -15,6 +15,7 @@ class MenuScreen extends ConsumerStatefulWidget {
 
 class _MenuScreenState extends ConsumerState<MenuScreen> {
   final ValueNotifier<double> _slidingValue = ValueNotifier(100);
+  final TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -47,16 +48,6 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
               SizedBox(height: 20),
 
               // Items
-              Row(
-                children: [
-                  Text(
-                    "Showing 2 items",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  Expanded(child: Divider()),
-                ],
-              ),
-              SizedBox(height: 10),
               _buildItemsGrid(),
             ],
           ),
@@ -143,60 +134,79 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
           title: "All",
           leadingIcon: "assets/icons/restaurant.svg",
           bgColor: AppColors.primWhite.withValues(alpha: 0.9),
-          onTap: () {},
+          onTap: () {
+            _searchController.clear();
+            ref.read(searchProvider.notifier).clear();
+          },
         ),
         customButtonWidget(
           context: context,
           title: "Burgers",
           leadingIcon: "assets/icons/burger.svg",
           bgColor: AppColors.primWhite.withValues(alpha: 0.9),
-          onTap: () {},
+          onTap: () {
+            _searchController.clear();
+            ref.read(searchProvider.notifier).search("Burgers");
+          },
         ),
         customButtonWidget(
           context: context,
           title: "Pizza",
           leadingIcon: "assets/icons/pizza.svg",
           bgColor: AppColors.primWhite.withValues(alpha: 0.9),
-          onTap: () {},
+          onTap: () {
+            _searchController.clear();
+            ref.read(searchProvider.notifier).search("Pizza");
+          },
         ),
         customButtonWidget(
           context: context,
           title: "Cake",
           leadingIcon: "assets/icons/cake.svg",
           bgColor: AppColors.primWhite.withValues(alpha: 0.9),
-          onTap: () {},
+          onTap: () {
+            _searchController.clear();
+            ref.read(searchProvider.notifier).search("Cake");
+          },
         ),
       ],
     );
   }
 
   Widget _buildItemsGrid() {
-    final foods = ref.watch(menuFoodProvider);
+    final foods = ref.watch(filteredFoodProvider);
     return foods.when(
       data:
-          (data) => GridView.builder(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: 3 / 5,
-            ),
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              final food = data[index];
+          (data) => Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "Showing ${data.length} items",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  Expanded(child: Divider()),
+                ],
+              ),
+              SizedBox(height: 10,),
+              GridView.builder(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 3 / 5,
+                ),
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  final food = data[index];
 
-              return foodCardWidget(
-                context: context,
-                url: food.image,
-                title: food.name,
-                description: food.description,
-                price: food.price,
-                rating: food.rating,
-              );
-            },
+                  return foodCardWidget(context: context, food: food);
+                },
+              ),
+            ],
           ),
       error:
           (error, stackTrace) => Center(
@@ -218,18 +228,28 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
   Widget _buildSearchBar() {
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(30),
-      borderSide: BorderSide(color: Colors.grey),
+      borderSide: BorderSide(color: Colors.grey, width: 2),
     );
     return Expanded(
       child: TextField(
+        controller: _searchController,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          border: border,
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          // border: border,
           enabledBorder: border,
+          focusedBorder: OutlineInputBorder( borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide(color: AppColors.primRed3, width: 2),),
           focusedErrorBorder: border,
           hintText: "Search",
           hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
         ),
+        onChanged: (value) {
+          // Notify search notifier
+          ref.read(searchProvider.notifier).search(value);
+        },
+        onTapOutside: (event) {
+          FocusScope.of(context).unfocus();
+        },
       ),
     );
   }
