@@ -4,6 +4,8 @@ import 'package:oneman/core/providers/cart_notifier.dart';
 import 'package:oneman/core/providers/dio_provider.dart';
 import 'package:oneman/core/providers/price_filter_notifier.dart';
 import 'package:oneman/core/providers/search_notifer.dart';
+import 'package:oneman/features/food_details/models/food_details_model.dart';
+import 'package:oneman/features/food_details/services/api_service.dart';
 import 'package:oneman/features/menu/models/food_model.dart';
 import 'package:oneman/features/menu/services/api_service.dart';
 
@@ -70,4 +72,17 @@ final cartQuantityProvider = Provider<int>((ref) {
   final cartItems = ref.watch(cartProvider);
 
   return cartItems.fold(0, (sum, item) => sum + item.quantity);
+});
+
+final foodDetailsServiceProvider = Provider<FoodDetailsAPIService>((ref) {
+  final dio = ref.read(dioProvider);
+  return FoodDetailsAPIService(dio: dio);
+});
+
+final foodDetailsProvider = FutureProvider.family<FoodDetailsModel, String>((
+  ref,
+  id,
+) async {
+  final service = ref.read(foodDetailsServiceProvider);
+  return service.fetchFoodDetailsById(id);
 });

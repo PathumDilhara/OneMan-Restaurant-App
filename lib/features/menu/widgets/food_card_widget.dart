@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oneman/core/models/cart_model.dart';
-import 'package:oneman/core/providers/menu_provider.dart';
+import 'package:oneman/core/providers/food_provider.dart';
 import 'package:oneman/core/utils/colors.dart';
 import 'package:oneman/core/widgets/custom_button_widget.dart';
 
@@ -17,7 +17,7 @@ Widget foodCardWidget({
   return InkWell(
     onTap: () {
       print("### Navigating");
-      GoRouter.of(context).push("/foodDetails", extra: food);
+      GoRouter.of(context).push("/foodDetails", extra: food.id);
     },
     child: Container(
       decoration: BoxDecoration(
@@ -107,7 +107,7 @@ Widget foodCardWidget({
                           print("### food adding");
                           ref
                               .watch(cartProvider.notifier)
-                              .addToCart(CartModel(food: food, quantity: 1));
+                              .addToCart(CartModel(foodId: food.id, quantity: 1));
                         },
                         trailingIcon: "assets/icons/add.svg",
                         bgColor: AppColors.primRed1,

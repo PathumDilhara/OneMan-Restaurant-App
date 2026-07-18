@@ -1,12 +1,13 @@
-import 'food_size_model.dart';
+import '../../menu/models/food_size_model.dart';
+import 'food_review_model.dart';
 
-class FoodModel {
+class FoodDetailsModel {
   final String id;
   final String name;
   final String slug;
   final String description;
-  final double price;
-  final double discountAmount;
+  final int price;
+  final int discountAmount;
   final String image;
   final String category;
   final String categorySlug;
@@ -15,9 +16,12 @@ class FoodModel {
   final bool isFeatured;
   final bool isSpecialOffer;
   final List<FoodSizeModel> sizes;
+  final List<String> galleryImages;
+  final List<dynamic> related;
+  final List<FoodReviewModel> reviews;
   final double rating;
 
-  FoodModel({
+  FoodDetailsModel({
     required this.id,
     required this.name,
     required this.slug,
@@ -32,17 +36,21 @@ class FoodModel {
     required this.isFeatured,
     required this.isSpecialOffer,
     required this.sizes,
+    required this.galleryImages,
+    required this.related,
+    required this.reviews,
     required this.rating,
   });
 
-  factory FoodModel.fromJson(Map<String, dynamic> json) {
-    return FoodModel(
+
+  factory FoodDetailsModel.fromJson(Map<String, dynamic> json) {
+    return FoodDetailsModel(
       id: json['id'].toString(),
       name: json['name'] ?? '',
       slug: json['slug'] ?? '',
       description: json['description'] ?? '',
-      price: (json['price'] as num?)?.toDouble() ?? 0.0,
-      discountAmount: (json['discount_amount'] as num?)?.toDouble()??0.0,
+      price: json['price'] ?? 0,
+      discountAmount: json['discount_amount'] ?? 0,
       image: json['image'] ?? '',
       category: json['category'] ?? '',
       categorySlug: json['category_slug'] ?? '',
@@ -50,11 +58,23 @@ class FoodModel {
       tasteType: json['taste_type'] ?? '',
       isFeatured: json['is_featured'] ?? false,
       isSpecialOffer: json['is_special_offer'] ?? false,
-      sizes:
-          (json['sizes'] as List<dynamic>)
-              .map((e) => FoodSizeModel.fromJson(e))
-              .toList(),
-      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+
+      sizes: (json['sizes'] as List<dynamic>? ?? [])
+          .map((e) => FoodSizeModel.fromJson(e))
+          .toList(),
+
+      galleryImages:
+      List<String>.from(json['gallery_images'] ?? []),
+
+      related: json['related'] ?? [],
+
+      reviews: (json['reviews'] as List<dynamic>? ?? [])
+          .map((e) => FoodReviewModel.fromJson(e))
+          .toList(),
+
+      rating: (json['rating'] ?? 0).toDouble(),
     );
   }
 }
+
+

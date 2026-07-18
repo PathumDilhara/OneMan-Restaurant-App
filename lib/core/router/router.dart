@@ -10,8 +10,8 @@ class AppRouter {
       GoRoute(path: "/menus", builder: (context, state) => MenuScreen()),
 
       GoRoute(path: "/foodDetails", builder: (context, state) {
-        final food = state.extra as FoodModel;
-        return FoodDetailsScreen(food: food);
+        final id = state.extra as String;
+        return FoodDetailsScreen(id: id);
       },)
     ],
   );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:oneman/core/providers/menu_provider.dart';
+import 'package:oneman/core/providers/food_provider.dart';
 import 'package:oneman/core/utils/colors.dart';
 import 'package:oneman/core/utils/constants.dart';
 import 'package:oneman/core/widgets/custom_button_widget.dart';

@@ -8,7 +8,7 @@ class CartNotifier extends Notifier<List<CartModel>> {
   }
 
   void addToCart(CartModel item) {
-    final isExists = state.any((e) => e.food.id == item.food.id);
+    final isExists = state.any((e) => e.foodId == item.foodId);
 
     if (isExists) {
       increaseQuantity(item);
@@ -20,7 +20,7 @@ class CartNotifier extends Notifier<List<CartModel>> {
   void increaseQuantity(CartModel item) {
     state =
         state.map((e) {
-          if (e.food.id == item.food.id) {
+          if (e.foodId == item.foodId) {
             return e.copyWith(quantity: e.quantity + item.quantity);
           }
 

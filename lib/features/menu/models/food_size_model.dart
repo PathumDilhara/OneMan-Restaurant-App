@@ -1,11 +1,11 @@
-class FoodSize {
+class FoodSizeModel {
   final String label;
   final double diff;
 
-  FoodSize({required this.label, required this.diff});
+  FoodSizeModel({required this.label, required this.diff});
 
-  factory FoodSize.fromJson(Map<String, dynamic> json) {
-    return FoodSize(
+  factory FoodSizeModel.fromJson(Map<String, dynamic> json) {
+    return FoodSizeModel(
       label: json['label'] ?? '',
       diff: (json['diff'] as num?)?.toDouble() ?? 0.0,
     );
