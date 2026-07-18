@@ -16,6 +16,8 @@ class MenuScreen extends ConsumerStatefulWidget {
 class _MenuScreenState extends ConsumerState<MenuScreen> {
   final ValueNotifier<double> _slidingValue = ValueNotifier(1700.0);
   final TextEditingController _searchController = TextEditingController();
+  final ValueNotifier<bool> _isBestSellers = ValueNotifier(false);
+  final ValueNotifier<bool> _isSpicy = ValueNotifier(false);
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -367,7 +369,17 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                     SizedBox(height: 5),
                     Row(
                       children: [
-                        Checkbox(value: false, onChanged: (value) {}),
+                        ValueListenableBuilder(
+                          valueListenable: _isSpicy,
+                          builder: (context, value, child) {
+                            return Checkbox(
+                              value: value,
+                              onChanged: (value) {
+                                _isSpicy.value = value ?? false;
+                              },
+                            );
+                          },
+                        ),
                         Icon(Icons.icecream),
                         Text("Spicy only"),
                       ],
@@ -375,7 +387,17 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                     SizedBox(height: 5),
                     Row(
                       children: [
-                        Checkbox(value: false, onChanged: (value) {}),
+                        ValueListenableBuilder(
+                          valueListenable: _isBestSellers,
+                          builder: (context, value, child) {
+                            return Checkbox(
+                              value: value,
+                              onChanged: (value) {
+                                _isBestSellers.value = value ?? false;
+                              },
+                            );
+                          },
+                        ),
                         Icon(Icons.start),
                         Text("Bestsellers"),
                       ],
