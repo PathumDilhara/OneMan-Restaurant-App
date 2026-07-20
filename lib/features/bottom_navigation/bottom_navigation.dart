@@ -15,7 +15,7 @@ class BottomNavigationScreen extends StatefulWidget {
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-  int _currentIndex = 0;
+  int _currentIndex = 2;
 
   late List<Widget> screens = [];
 
@@ -105,7 +105,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               ),
               child: SVGIcon(
                 icon: icon,
-                color: isSelected ? AppColors.primRed2 : Colors.grey.shade500,
+                color: isSelected ? AppColors.primRed2 : Colors.grey.shade800,
                 size: 25,
               ),
             ),

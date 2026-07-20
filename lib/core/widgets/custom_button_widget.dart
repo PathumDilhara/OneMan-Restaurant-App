@@ -9,6 +9,7 @@ Widget customButtonWidget({
   String? trailingIcon,
   double? width,
   double? height,
+  double br=100,
   required VoidCallback onTap,
   Color bgColor = AppColors.primWhite,
   Color iconColor = AppColors.primDark,
@@ -17,10 +18,10 @@ Widget customButtonWidget({
   Color tappingColor = AppColors.primGrey,
 }) {
   return Material(
-    borderRadius: BorderRadius.circular(100),
+    borderRadius: BorderRadius.circular(br),
     color: Colors.transparent,
     child: InkWell(
-      borderRadius: BorderRadius.circular(100),
+      borderRadius: BorderRadius.circular(br),
       overlayColor: WidgetStatePropertyAll(
         tappingColor..withValues(alpha: 0.3),
       ),
@@ -31,7 +32,7 @@ Widget customButtonWidget({
         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.circular(100),
+          borderRadius: BorderRadius.circular(br),
           border: Border.all(color: borderColor),
         ),
         child: Row(

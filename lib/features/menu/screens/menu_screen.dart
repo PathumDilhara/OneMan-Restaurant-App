@@ -4,6 +4,7 @@ import 'package:oneman/core/providers/food_provider.dart';
 import 'package:oneman/core/utils/colors.dart';
 import 'package:oneman/core/utils/constants.dart';
 import 'package:oneman/core/widgets/custom_button_widget.dart';
+import 'package:oneman/core/widgets/shopping_cart_widget.dart';
 import 'package:oneman/features/menu/widgets/food_card_widget.dart';
 
 class MenuScreen extends ConsumerStatefulWidget {
@@ -26,7 +27,12 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(kMainPadding),
+          padding: EdgeInsets.only(
+            left: kMainPadding,
+            right: kMainPadding,
+            top: kMainPadding,
+            bottom: kMainPadding * 10,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -72,52 +78,18 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(100),
-            child: Image.asset("assets/images/newlogoo.png", width: 60),
+            child: Image.asset(
+              "assets/images/newlogoo.png",
+              width: kLogoSize,
+              height: kLogoSize,
+            ),
           ),
           SizedBox(width: 10),
 
           _buildSearchBar(),
           SizedBox(width: 10),
 
-          IconButton(
-            onPressed: () {},
-            icon: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 20,
-                  ),
-                  child: Icon(
-                    Icons.shopping_cart,
-                    color: AppColors.primRed3,
-                    size: 25,
-                  ),
-                ),
-                Positioned(
-                  right: 3,
-                  top: 3,
-                  child: Container(
-                    width: 25,
-                    height: 25,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(200),
-                      color: Colors.green.shade800,
-                    ),
-                    child: Center(
-                      child: Text(
-                        quantity.toString(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primWhite,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          shoppingCartWidget(quantity),
         ],
       ),
     );
@@ -349,7 +321,6 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                               divisions: 1700,
                               label: value.toStringAsFixed(2),
                               onChanged: (newVal) {
-                                print("############# $newVal");
                                 _slidingValue.value = newVal;
                                 ref
                                     .read(priceFilterProvider.notifier)

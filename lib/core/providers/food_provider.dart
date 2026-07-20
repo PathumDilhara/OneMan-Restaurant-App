@@ -7,7 +7,7 @@ import 'package:oneman/core/providers/notifiers/search_notifer.dart';
 import 'package:oneman/features/food_details/models/food_details_model.dart';
 import 'package:oneman/features/food_details/services/api_service.dart';
 import 'package:oneman/features/menu/models/food_model.dart';
-import 'package:oneman/features/menu/services/api_service.dart';
+import 'package:oneman/features/menu/services/menu_api_service.dart';
 
 // Provider for Service layer connection
 final menuAPIServiceProvider = Provider<MenuAPIService>((ref) {

@@ -1,5 +1,3 @@
-import 'package:oneman/features/menu/models/food_model.dart';
-
 class CartModel {
   final String foodId;
   final int quantity;

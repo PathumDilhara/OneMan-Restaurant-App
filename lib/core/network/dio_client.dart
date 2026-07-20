@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:oneman/core/network/api_constants.dart';
 
 class DioClient {
   late Dio dio;
@@ -6,7 +7,7 @@ class DioClient {
   DioClient() {
     dio = Dio(
       BaseOptions(
-        baseUrl: "https://onemansys.vampior.com/api",
+        baseUrl: ApiConstants.baseUrl,
         connectTimeout: Duration(seconds: 5),
 
         receiveTimeout: Duration(seconds: 5),

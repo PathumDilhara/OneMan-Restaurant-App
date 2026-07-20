@@ -27,6 +27,4 @@ class MenuAPIService {
       rethrow;
     }
   }
-
-
 }
