@@ -16,7 +16,6 @@ Widget foodCardWidget({
 }) {
   return InkWell(
     onTap: () {
-      print("### Navigating");
       GoRouter.of(context).push("/foodDetails", extra: food.id);
     },
     child: Container(

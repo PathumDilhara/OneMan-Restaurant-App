@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oneman/core/models/cart_model.dart';
-import 'package:oneman/core/providers/cart_notifier.dart';
+import 'package:oneman/core/providers/notifiers/cart_notifier.dart';
 import 'package:oneman/core/providers/dio_provider.dart';
-import 'package:oneman/core/providers/price_filter_notifier.dart';
-import 'package:oneman/core/providers/search_notifer.dart';
+import 'package:oneman/core/providers/notifiers/price_filter_notifier.dart';
+import 'package:oneman/core/providers/notifiers/search_notifer.dart';
 import 'package:oneman/features/food_details/models/food_details_model.dart';
 import 'package:oneman/features/food_details/services/api_service.dart';
 import 'package:oneman/features/menu/models/food_model.dart';

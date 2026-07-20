@@ -18,6 +18,7 @@ class SVGIcon extends StatelessWidget {
       icon,
       width: size,
       height: size,
+      fit: BoxFit.cover,
       colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
     );
   }
