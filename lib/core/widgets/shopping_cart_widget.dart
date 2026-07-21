@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:oneman/core/router/router_paths.dart';
 import '../utils/colors.dart';
 
-Widget shoppingCartWidget(int quantity) {
+Widget shoppingCartWidget(int quantity, BuildContext context) {
   return IconButton(
-    onPressed: () {},
+    onPressed: () {
+      GoRouter.of(context).push(RouterPaths.cart);
+    },
     icon: Stack(
       children: [
         Padding(

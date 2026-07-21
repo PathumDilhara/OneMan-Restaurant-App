@@ -1,10 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:oneman/core/loggor/loggor.dart';
 import 'package:oneman/core/models/cart_model.dart';
 import 'package:oneman/core/providers/food_provider.dart';
 import 'package:oneman/core/utils/constants.dart';
+import 'package:oneman/core/widgets/shopping_cart_widget.dart';
 
+import '../../../core/providers/cart_provider.dart';
 import '../../../core/utils/colors.dart';
 import '../../../core/widgets/custom_button_widget.dart';
 import '../review_card.dart';
@@ -17,12 +21,27 @@ class FoodDetailsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final food = ref.watch(foodDetailsProvider(id));
-
+    final quantity = ref.watch(cartQuantityProvider);
     return food.when(
       data:
           (food) => Scaffold(
-            appBar: AppBar(title: Text(food.name)),
+            appBar: AppBar(
+              title: Text(food.name),
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                onPressed: () => GoRouter.of(context).pop(),
+                icon: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: AppColors.primDark,
+                ),
+              ),
+              actions: [
+                IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
+                shoppingCartWidget(quantity, context),
+              ],
+            ),
             body: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Column(
                 children: [
                   Stack(
@@ -125,38 +144,37 @@ class FoodDetailsScreen extends ConsumerWidget {
                             context,
                           ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
                         ),
-                        SizedBox(height: 30,),
+                        SizedBox(height: 30),
 
                         Row(
                           children: [
-                            Text("Reviews", style: Theme.of(context).textTheme.bodyLarge,),
-                            SizedBox(width: 10,),
-                            Expanded(child: Divider())
+                            Text(
+                              "Reviews",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(child: Divider()),
                           ],
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(height: 10),
 
                         // Reviews List
                         food.reviews.isEmpty
                             ? Text(
-                          "No reviews yet",
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        )
-                            :
-
-                        Column(
-                          children: food.reviews
-                              .map(
-                                (review) => reviewCard(
-                              context: context,
-                              review: review,
+                              "No reviews yet",
+                              style: TextStyle(color: Colors.grey),
+                            )
+                            : Column(
+                              children:
+                                  food.reviews
+                                      .map(
+                                        (review) => reviewCard(
+                                          context: context,
+                                          review: review,
+                                        ),
+                                      )
+                                      .toList(),
                             ),
-                          )
-                              .toList(),
-                        ),
-
                       ],
                     ),
                   ),
@@ -186,11 +204,14 @@ class FoodDetailsScreen extends ConsumerWidget {
                     context: context,
                     title: "Add",
                     onTap: () {
-                      print("### Add ${food.name}");
+                      appLogger.i("Food adding : ${food.name}");
                       ref
                           .watch(cartProvider.notifier)
                           .addToCart(
-                            CartModel(foodId: food.id, quantity: _quantity.value),
+                            CartModel(
+                              foodId: food.id,
+                              quantity: _quantity.value,
+                            ),
                           );
                     },
                     trailingIcon: "assets/icons/add.svg",

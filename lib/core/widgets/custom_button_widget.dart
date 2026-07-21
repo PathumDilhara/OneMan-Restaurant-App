@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:oneman/core/utils/colors.dart';
 import 'package:oneman/core/utils/svg_icon.dart';
@@ -5,11 +6,12 @@ import 'package:oneman/core/utils/svg_icon.dart';
 Widget customButtonWidget({
   required BuildContext context,
   required String title,
-  String? leadingIcon,
+  String? leadingIconPath,
+  String? leadingImageUrl,
   String? trailingIcon,
   double? width,
   double? height,
-  double br=100,
+  double br = 100,
   required VoidCallback onTap,
   Color bgColor = AppColors.primWhite,
   Color iconColor = AppColors.primDark,
@@ -36,12 +38,25 @@ Widget customButtonWidget({
           border: Border.all(color: borderColor),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (leadingIcon != null)
+            if (leadingImageUrl != null)
               Padding(
-                padding: const EdgeInsets.only(right: 3.0),
-                child: SVGIcon(icon: leadingIcon, color: iconColor),
+                padding: const EdgeInsets.only(right: 5.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(200),
+                  child: CachedNetworkImage(
+                    imageUrl: leadingImageUrl,
+                    fit: BoxFit.cover,
+                    width: 25,
+                      height: 25,
+                  ),
+                ),
+              ),
+            if (leadingIconPath != null)
+              Padding(
+                padding: const EdgeInsets.only(right: 5.0),
+                child: SVGIcon(icon: leadingIconPath, color: iconColor),
               ),
             Text(
               title,
@@ -52,7 +67,7 @@ Widget customButtonWidget({
             ),
             if (trailingIcon != null)
               Padding(
-                padding: const EdgeInsets.only(left: 3.0),
+                padding: const EdgeInsets.only(left: 5.0),
                 child: SVGIcon(icon: trailingIcon, color: iconColor),
               ),
           ],

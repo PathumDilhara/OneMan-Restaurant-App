@@ -1,4 +1,4 @@
-import '../../menu/models/food_size_model.dart';
+import '../../../core/models/food_size_model.dart';
 import 'food_review_model.dart';
 
 class FoodDetailsModel {

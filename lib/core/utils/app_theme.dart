@@ -27,5 +27,6 @@ class AppTheme {
       toolbarHeight: 80,
       iconTheme: IconThemeData(color: AppColors.primRed3)
     ),
+
   );
 }

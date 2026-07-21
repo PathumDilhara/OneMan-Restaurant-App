@@ -1,12 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:oneman/core/models/cart_model.dart';
-import 'package:oneman/core/providers/notifiers/cart_notifier.dart';
 import 'package:oneman/core/providers/dio_provider.dart';
 import 'package:oneman/core/providers/notifiers/price_filter_notifier.dart';
 import 'package:oneman/core/providers/notifiers/search_notifer.dart';
 import 'package:oneman/features/food_details/models/food_details_model.dart';
 import 'package:oneman/features/food_details/services/api_service.dart';
-import 'package:oneman/features/menu/models/food_model.dart';
+import 'package:oneman/core/models/food_model.dart';
 import 'package:oneman/features/menu/services/menu_api_service.dart';
 
 // Provider for Service layer connection
@@ -64,15 +62,7 @@ final filteredFoodProvider = Provider<AsyncValue<List<FoodModel>>>((ref) {
 // UI GridView is watching filteredFoodProvider
 // GridView rebuilds with the filtered result
 
-final cartProvider = NotifierProvider<CartNotifier, List<CartModel>>(
-  CartNotifier.new,
-);
 
-final cartQuantityProvider = Provider<int>((ref) {
-  final cartItems = ref.watch(cartProvider);
-
-  return cartItems.fold(0, (sum, item) => sum + item.quantity);
-});
 
 final foodDetailsServiceProvider = Provider<FoodDetailsAPIService>((ref) {
   final dio = ref.read(dioProvider);

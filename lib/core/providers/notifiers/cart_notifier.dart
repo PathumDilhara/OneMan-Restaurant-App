@@ -27,4 +27,22 @@ class CartNotifier extends Notifier<List<CartModel>> {
           return e;
         }).toList();
   }
+
+  void decreaseQuantity(String foodId) {
+    state =
+        state.map((e) {
+          if (e.foodId == foodId && e.quantity > 1) {
+            return e.copyWith(quantity: e.quantity - 1);
+          }
+          return e;
+        }).toList();
+  }
+
+  void removeFromCart(String foodId) {
+    state = state.where((e) => e.foodId != foodId).toList();
+  }
+
+  void clearCart() {
+    state = [];
+  }
 }

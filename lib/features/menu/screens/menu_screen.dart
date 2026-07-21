@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oneman/core/providers/category_provoider.dart';
 import 'package:oneman/core/providers/food_provider.dart';
 import 'package:oneman/core/utils/colors.dart';
 import 'package:oneman/core/utils/constants.dart';
+import 'package:oneman/core/utils/svg_icon.dart';
 import 'package:oneman/core/widgets/custom_button_widget.dart';
 import 'package:oneman/core/widgets/shopping_cart_widget.dart';
 import 'package:oneman/features/menu/widgets/food_card_widget.dart';
+
+import '../../../core/providers/cart_provider.dart';
 
 class MenuScreen extends ConsumerStatefulWidget {
   const MenuScreen({super.key});
@@ -26,12 +30,13 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
 
     return Scaffold(
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.only(
             left: kMainPadding,
             right: kMainPadding,
-            top: kMainPadding,
-            bottom: kMainPadding * 10,
+            top: kMainPadding * 5,
+            bottom: kMainPadding * 12,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,12 +48,15 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
               ),
               SizedBox(height: 30),
 
-              // Screen details
-              _buildDetailsBar(screenWidth),
+              // Screen intro card
+              _buildScreenIntroCard(screenWidth),
+              SizedBox(height: 20),
+
+              _buildSearchBar(),
               SizedBox(height: 20),
 
               // menu options
-              _buildMenuChips(),
+              _buildCategoryChips(),
               SizedBox(height: 20),
 
               // filters
@@ -72,121 +80,133 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
   }) {
     final quantity = ref.watch(cartQuantityProvider);
 
-    return Padding(
-      padding: EdgeInsets.only(top: kMainPadding * 3),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: Image.asset(
-              "assets/images/newlogoo.png",
-              width: kLogoSize,
-              height: kLogoSize,
-            ),
-          ),
-          SizedBox(width: 10),
-
-          _buildSearchBar(),
-          SizedBox(width: 10),
-
-          shoppingCartWidget(quantity),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDetailsBar(double screenWidth) {
-    return Container(
-      width: double.infinity,
-      height: 100,
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-          colors: [AppColors.primRed1, AppColors.primRed2],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Column(
-        children: [
-          Text(
-            "FRESH | HOT | CRISPY",
-            style: Theme.of(context).textTheme.labelSmall!.copyWith(
-              color: AppColors.primGrey,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 3),
-
-          Text(
-            "Our Menu",
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              color: AppColors.primGrey,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 3),
-
-          Text(
-            "Handpicked favorites made fresh to order.",
-            style: Theme.of(context).textTheme.labelSmall!.copyWith(
-              color: AppColors.primGrey,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMenuChips() {
     return Row(
-      // direction: Axis.horizontal,
-      // spacing: 20,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        customButtonWidget(
-          context: context,
-          title: "All",
-          leadingIcon: "assets/icons/restaurant.svg",
-          bgColor: AppColors.primWhite.withValues(alpha: 0.9),
-          onTap: () {
-            _searchController.clear();
-            ref.read(searchProvider.notifier).clear();
-          },
+      children: [
+        // ClipRRect(
+        //   borderRadius: BorderRadius.circular(100),
+        //   child: Image.asset(
+        //     "assets/images/newlogoo.png",
+        //     width: kLogoSize,
+        //     height: kLogoSize,
+        //   ),
+        // ),
+        SizedBox(width: 10),
+        // Middle content
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Good Morning UserName",
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall!.copyWith(color: AppColors.primDarktGrey),
+            ),
+            Text(
+              "What would you like?",
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold, color: AppColors.primRed2),
+            ),
+          ],
         ),
-        customButtonWidget(
-          context: context,
-          title: "Burgers",
-          leadingIcon: "assets/icons/burger.svg",
-          bgColor: AppColors.primWhite.withValues(alpha: 0.9),
-          onTap: () {
-            _searchController.clear();
-            ref.read(searchProvider.notifier).search("Burgers");
-          },
+        Spacer(),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.notifications_none_rounded, size: 28),
         ),
-        customButtonWidget(
-          context: context,
-          title: "Pizza",
-          leadingIcon: "assets/icons/pizza.svg",
-          bgColor: AppColors.primWhite.withValues(alpha: 0.9),
-          onTap: () {
-            _searchController.clear();
-            ref.read(searchProvider.notifier).search("Pizza");
-          },
+
+        shoppingCartWidget(quantity, context),
+      ],
+    );
+  }
+
+  Widget _buildScreenIntroCard(double screenWidth) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "FRESH | HOT | CRISPY",
+          style: Theme.of(context).textTheme.labelSmall!.copyWith(
+            color: AppColors.primDarktGrey,
+            fontWeight: FontWeight.w500,
+          ),
         ),
-        customButtonWidget(
-          context: context,
-          title: "Cake",
-          leadingIcon: "assets/icons/cake.svg",
-          bgColor: AppColors.primWhite.withValues(alpha: 0.9),
-          onTap: () {
-            _searchController.clear();
-            ref.read(searchProvider.notifier).search("Cake");
-          },
+        SizedBox(height: 3),
+
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "Delicious ",
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color: AppColors.primDarktGrey,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: "Menu",
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color: AppColors.primRed2,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
+    );
+  }
+
+  Widget _buildCategoryChips() {
+    final categories = ref.watch(categoryProvider);
+
+    return categories.when(
+      data:
+          (data) => SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              spacing: 10,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                customButtonWidget(
+                  context: context,
+                  title: "All",
+                  leadingIconPath: "assets/icons/restaurant_bnb.svg",
+                  iconColor: AppColors.primRed1,
+                  onTap: () {
+                    _searchController.clear();
+                    ref.read(searchProvider.notifier).clear();
+                  },
+                ),
+                ...data.map(
+                  (e) => customButtonWidget(
+                    context: context,
+                    title: e.name,
+                    bgColor: AppColors.primWhite.withValues(alpha: 0.9),
+                    leadingImageUrl: e.image,
+                    onTap: () {
+                      _searchController.clear();
+                      ref.read(searchProvider.notifier).search(e.name);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+      error:
+          (error, stackTrace) => Center(
+            child: Column(
+              children: [
+                Icon(Icons.error, color: AppColors.primRed1, size: 100),
+                SizedBox(height: 20),
+                Text(
+                  "Error fetching foods",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ],
+            ),
+          ),
+      loading: () => Center(child: CircularProgressIndicator()),
     );
   }
 
@@ -244,32 +264,40 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
 
   Widget _buildSearchBar() {
     final border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(30),
-      borderSide: BorderSide(color: Colors.grey, width: 2),
+      borderRadius: BorderRadius.circular(kTextFieldBR),
+      borderSide: BorderSide(color: Colors.transparent, width: 2),
     );
-    return Expanded(
-      child: TextField(
-        controller: _searchController,
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          // border: border,
-          enabledBorder: border,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(color: AppColors.primRed3, width: 2),
-          ),
-          focusedErrorBorder: border,
-          hintText: "Search",
-          hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
+    return TextField(
+      controller: _searchController,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        filled: true,
+        fillColor: AppColors.primRed3.withValues(alpha: 0.1),
+        prefixIcon: Icon(
+          Icons.search,
+          color: AppColors.primDarktGrey.withValues(alpha: 0.8),
+          size: 30,
         ),
-        onChanged: (value) {
-          // Notify search notifier
-          ref.read(searchProvider.notifier).search(value);
-        },
-        onTapOutside: (event) {
-          FocusScope.of(context).unfocus();
-        },
+        border: border,
+        enabledBorder: border,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide(color: AppColors.primRed3, width: 2),
+        ),
+        focusedErrorBorder: border,
+        hintText: "Search",
+        hintStyle: TextStyle(
+          fontSize: 20,
+          color: AppColors.primDarktGrey.withValues(alpha: 0.8),
+        ),
       ),
+      onChanged: (value) {
+        // Notify search notifier
+        ref.read(searchProvider.notifier).search(value);
+      },
+      onTapOutside: (event) {
+        FocusScope.of(context).unfocus();
+      },
     );
   }
 
@@ -279,7 +307,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
       title: "Filters",
       bgColor: AppColors.primRed1,
       titleColor: AppColors.primWhite,
-      leadingIcon: "assets/icons/filter.svg",
+      leadingIconPath: "assets/icons/filter.svg",
       iconColor: AppColors.primWhite,
       width: 100,
       onTap: () {
@@ -351,7 +379,10 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                             );
                           },
                         ),
-                        Icon(Icons.icecream),
+                        SVGIcon(
+                          icon: "assets/icons/spicy.svg",
+                          color: AppColors.primRed1,
+                        ),
                         Text("Spicy only"),
                       ],
                     ),
@@ -369,7 +400,10 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                             );
                           },
                         ),
-                        Icon(Icons.start),
+                        SVGIcon(
+                          icon: "assets/icons/best.svg",
+                          color: AppColors.primRed1,
+                        ),
                         Text("Bestsellers"),
                       ],
                     ),

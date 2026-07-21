@@ -1,0 +1,7 @@
+- [x] Convert `ContactScreen` to `StatefulWidget`
+- [x] Implement the "Get in Touch" header and description
+- [x] Build Contact Info Cards (Hotline, Email, Location)
+- [x] Implement Business Hours and FAQ Section
+- [x] Build the Inquiry Form with validation
+- [x] Add Footer branding and copyright info
+- [x] Verify the UI and form interactions

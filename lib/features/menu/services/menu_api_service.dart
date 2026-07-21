@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:oneman/core/loggor/loggor.dart';
-import 'package:oneman/features/menu/models/food_model.dart';
+import 'package:oneman/core/models/food_model.dart';
 
 class MenuAPIService {
   final Dio dio;

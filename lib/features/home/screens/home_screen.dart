@@ -1,12 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:oneman/core/providers/category_provoider.dart';
 import 'package:oneman/core/providers/food_provider.dart';
+import 'package:oneman/core/router/router_paths.dart';
 import 'package:oneman/core/utils/colors.dart';
 import 'package:oneman/core/utils/constants.dart';
 import 'package:oneman/core/widgets/custom_button_widget.dart';
 import 'package:oneman/core/widgets/shopping_cart_widget.dart';
+
+import '../../../core/providers/cart_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -32,35 +36,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(
-          left: kMainPadding,
-          right: kMainPadding,
-          top: kMainPadding * 6,
-        ),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildHomeHeader(),
-              const SizedBox(height: 24),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: kMainPadding,
+            right: kMainPadding,
+            top: kMainPadding * 5,
+            bottom: kMainPadding * 10,
+          ),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildHomeHeader(),
+                const SizedBox(height: 24),
 
-              _buildDeliveryCard(),
-              const SizedBox(height: 28),
+                _buildDeliveryCard(),
+                const SizedBox(height: 28),
 
-              _buildPromoBanner(),
-              const SizedBox(height: 28),
+                _buildPromoBanner(),
+                const SizedBox(height: 28),
 
-              _buildCategoryRow(),
-              const SizedBox(height: 24),
+                _buildCategoryRow(),
+                const SizedBox(height: 24),
 
-              _buildSectionHeader("Popular Now", onSeeAll: () {}),
-              const SizedBox(height: 12),
+                _buildSectionHeader("Popular Now", onSeeAll: () {}),
+                const SizedBox(height: 12),
 
-              _buildPopularPlaceholder(),
-              const SizedBox(height: 40),
-            ],
+                _buildPopularPlaceholder(),
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),
@@ -103,7 +111,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Welcome back 👋",
+              "Welcome back",
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium!.copyWith(color: AppColors.primDarktGrey),
@@ -111,32 +119,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 2),
             Text(
               "User Name", // TODO
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.primRed2,
+              ),
             ),
           ],
         ),
         Spacer(),
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.notifications_none_rounded, size: 25),
+          icon: const Icon(Icons.notifications_none_rounded, size: 28),
         ),
-        shoppingCartWidget(quantity),
+        shoppingCartWidget(quantity, context),
       ],
     );
   }
 
   // ---------- DELIVERY SEARCH CARD ----------
   Widget _buildDeliveryCard() {
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(kTextFieldBR),
+      borderSide: BorderSide(color: AppColors.primDarktGrey),
+    );
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
-        color: AppColors.primWhite,
+        color: AppColors.primRed1.withValues(alpha: 0.4),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -172,7 +186,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.location_on_outlined,
-                        color: AppColors.primGrey,
+                        color: AppColors.primDarktGrey.withValues(alpha: 0.8),
                       ),
                       suffixIcon: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -184,23 +198,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ],
                       ),
                       filled: true,
-                      fillColor: AppColors.primWhite,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        borderSide: BorderSide(
-                          color: AppColors.primDarktGrey.withOpacity(0.2),
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        borderSide: BorderSide(
-                          color: AppColors.primDarktGrey.withOpacity(0.15),
-                        ),
-                      ),
+                      fillColor: AppColors.primLightGrey.withValues(alpha: 0.8),
+                      border: border,
+                      enabledBorder: border,
                       contentPadding: const EdgeInsets.symmetric(vertical: 10),
                       hintText: "Enter your delivery location",
-                      hintStyle: Theme.of(context).textTheme.bodyMedium!
-                          .copyWith(color: AppColors.primGrey),
+                      hintStyle: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium!.copyWith(
+                        color: AppColors.primDarktGrey.withValues(alpha: 0.8),
+                      ),
                     ),
                     onTapOutside: (event) => FocusScope.of(context).unfocus(),
                     validator: (value) {
@@ -220,7 +227,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 br: 10,
                 bgColor: AppColors.primRed2,
                 titleColor: AppColors.primWhite,
-                leadingIcon: "assets/icons/search.svg",
+                leadingIconPath: "assets/icons/search.svg",
                 iconColor: AppColors.primWhite,
                 onTap: () {
                   _formKey.currentState!.validate();
@@ -399,62 +406,71 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               itemBuilder: (context, index) {
                 final food = data[index];
 
-                return Container(
-                  width: 140,
-                  decoration: BoxDecoration(
-                    color: AppColors.primWhite,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 12,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 110,
-                        decoration: BoxDecoration(
-                          color: AppColors.primRed1.withValues(alpha: 0.08),
-                          borderRadius:  BorderRadius.circular(16),
+                return GestureDetector(
+                  onTap: () {
+                    GoRouter.of(
+                      context,
+                    ).push(RouterPaths.foodDetails, extra: food.id);
+                  },
+                  child: Container(
+                    width: 140,
+                    decoration: BoxDecoration(
+                      color: AppColors.primWhite,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 12,
+                          offset: const Offset(0, 6),
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                          child: CachedNetworkImage(
-                            imageUrl: food.image,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 110,
+                          decoration: BoxDecoration(
+                            color: AppColors.primRed1.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(16),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: food.image,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              food.name,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "LKR ${food.price}",
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodySmall!.copyWith(
-                                color: AppColors.primRed2,
-                                fontWeight: FontWeight.bold,
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                food.name,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
+                              const SizedBox(height: 4),
+                              Text(
+                                "LKR ${food.price.toStringAsFixed(2)}",
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.bodySmall!.copyWith(
+                                  color: AppColors.primRed2,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },

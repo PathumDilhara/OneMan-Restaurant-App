@@ -12,6 +12,6 @@ class SearchNotifier extends Notifier<String>{
   }
 
   void search (String value){
-    state = value.trim();
+    state = value.trim().toLowerCase();
   }
 }
