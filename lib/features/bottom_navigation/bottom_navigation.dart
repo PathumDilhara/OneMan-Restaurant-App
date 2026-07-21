@@ -99,7 +99,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
             margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: AppColors.primLightGrey, //primLightGrey
+              color: AppColors.primBNB, //primLightGrey
               borderRadius: BorderRadius.circular(100),
               boxShadow: [
                 BoxShadow(
