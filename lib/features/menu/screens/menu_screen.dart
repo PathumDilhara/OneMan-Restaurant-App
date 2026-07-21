@@ -36,7 +36,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
             left: kMainPadding,
             right: kMainPadding,
             top: kMainPadding * 5,
-            bottom: kMainPadding * 12,
+            bottom: kMainPadding * 14,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +99,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
               "Good Morning UserName",
               style: Theme.of(
                 context,
-              ).textTheme.bodySmall!.copyWith(color: AppColors.primDarktGrey),
+              ).textTheme.bodySmall!.copyWith(color: AppColors.primDarkGrey),
             ),
             Text(
               "What would you like?",
@@ -127,7 +127,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
         Text(
           "FRESH | HOT | CRISPY",
           style: Theme.of(context).textTheme.labelSmall!.copyWith(
-            color: AppColors.primDarktGrey,
+            color: AppColors.primDarkGrey,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -139,7 +139,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
               TextSpan(
                 text: "Delicious ",
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: AppColors.primDarktGrey,
+                  color: AppColors.primDarkGrey,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -275,7 +275,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
         fillColor: AppColors.primRed3.withValues(alpha: 0.1),
         prefixIcon: Icon(
           Icons.search,
-          color: AppColors.primDarktGrey.withValues(alpha: 0.8),
+          color: AppColors.primDarkGrey.withValues(alpha: 0.8),
           size: 30,
         ),
         border: border,
@@ -288,7 +288,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
         hintText: "Search",
         hintStyle: TextStyle(
           fontSize: 20,
-          color: AppColors.primDarktGrey.withValues(alpha: 0.8),
+          color: AppColors.primDarkGrey.withValues(alpha: 0.8),
         ),
       ),
       onChanged: (value) {

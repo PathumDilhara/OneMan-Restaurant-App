@@ -43,7 +43,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             left: kMainPadding,
             right: kMainPadding,
             top: kMainPadding * 5,
-            bottom: kMainPadding * 10,
+            bottom: kMainPadding * 14,
           ),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
@@ -114,7 +114,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               "Welcome back",
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium!.copyWith(color: AppColors.primDarktGrey),
+              ).textTheme.bodyMedium!.copyWith(color: AppColors.primDarkGrey),
             ),
             const SizedBox(height: 2),
             Text(
@@ -140,7 +140,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildDeliveryCard() {
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(kTextFieldBR),
-      borderSide: BorderSide(color: AppColors.primDarktGrey),
+      borderSide: BorderSide(color: AppColors.primDarkGrey),
     );
 
     return Container(
@@ -186,7 +186,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.location_on_outlined,
-                        color: AppColors.primDarktGrey.withValues(alpha: 0.8),
+                        color: AppColors.primDarkGrey.withValues(alpha: 0.8),
                       ),
                       suffixIcon: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -206,7 +206,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       hintStyle: Theme.of(
                         context,
                       ).textTheme.bodyMedium!.copyWith(
-                        color: AppColors.primDarktGrey.withValues(alpha: 0.8),
+                        color: AppColors.primDarkGrey.withValues(alpha: 0.8),
                       ),
                     ),
                     onTapOutside: (event) => FocusScope.of(context).unfocus(),

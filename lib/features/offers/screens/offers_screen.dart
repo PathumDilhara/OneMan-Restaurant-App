@@ -39,7 +39,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
           left: kMainPadding,
           right: kMainPadding,
           top: kMainPadding * 5,
-          bottom: kMainPadding * 12,
+          bottom: kMainPadding * 14,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +107,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
               "Grab your favorites at low prices",
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium!.copyWith(color: AppColors.primDarktGrey),
+              ).textTheme.bodyMedium!.copyWith(color: AppColors.primDarkGrey),
             ),
           ],
         ),
@@ -343,7 +343,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
                           style: Theme.of(
                             context,
                           ).textTheme.labelMedium!.copyWith(
-                            color: AppColors.primDarktGrey,
+                            color: AppColors.primDarkGrey,
                             decoration: TextDecoration.lineThrough,
                           ),
                         ),

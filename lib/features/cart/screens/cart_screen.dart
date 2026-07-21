@@ -59,7 +59,7 @@ class CartScreen extends ConsumerWidget {
             "Your cart is empty",
             style: Theme.of(
               context,
-            ).textTheme.titleMedium!.copyWith(color: AppColors.primDarktGrey),
+            ).textTheme.titleMedium!.copyWith(color: AppColors.primDarkGrey),
           ),
           const SizedBox(height: 30),
           customButtonWidget(
@@ -306,7 +306,7 @@ class CartScreen extends ConsumerWidget {
         Text(
           label,
           style: TextStyle(
-            color: isTotal ? AppColors.primDark : AppColors.primDarktGrey,
+            color: isTotal ? AppColors.primDark : AppColors.primDarkGrey,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
             fontSize: isTotal ? 18 : 14,
           ),

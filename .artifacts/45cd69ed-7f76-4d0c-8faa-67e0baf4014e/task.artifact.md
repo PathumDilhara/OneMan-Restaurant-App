@@ -1,7 +1,7 @@
-- [x] Convert `ContactScreen` to `StatefulWidget`
-- [x] Implement the "Get in Touch" header and description
-- [x] Build Contact Info Cards (Hotline, Email, Location)
-- [x] Implement Business Hours and FAQ Section
-- [x] Build the Inquiry Form with validation
-- [x] Add Footer branding and copyright info
-- [x] Verify the UI and form interactions
+- [x] Convert `ProfileScreen` to `StatefulWidget`
+- [x] Implement the Profile Header (Avatar, Name, Email)
+- [x] Build the Quick Stats Row (Orders, Cart, Wishlist)
+- [x] Add the Sign Out button
+- [x] Implement the Personal Information section with fields
+- [x] Add the Footer branding
+- [x] Verify UI interactions and layout

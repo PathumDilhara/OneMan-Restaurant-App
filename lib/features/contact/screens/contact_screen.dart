@@ -23,8 +23,10 @@ class _ContactScreenState extends State<ContactScreen> {
     'Event Catering',
     'Online Delivery Query',
     'General Inquiry',
-    'Feedback'
+    'Feedback',
   ];
+
+  ValueNotifier<List<int>> openedList = ValueNotifier([]);
 
   @override
   void dispose() {
@@ -42,11 +44,15 @@ class _ContactScreenState extends State<ContactScreen> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: kMainPadding * 2),
+          padding: EdgeInsets.only(
+            left: kMainPadding * 2,
+            right: kMainPadding * 2,
+            top: kMainPadding * 6,
+            bottom: kMainPadding * 14,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: kMainPadding * 6),
               _buildHeader(),
               const SizedBox(height: 30),
 
@@ -77,17 +83,17 @@ class _ContactScreenState extends State<ContactScreen> {
         Text(
           "Get in Touch",
           style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.primRed2,
-              ),
+            fontWeight: FontWeight.bold,
+            color: AppColors.primRed2,
+          ),
         ),
         const SizedBox(height: 12),
         Text(
           "Have questions about reservations, event catering, or online deliveries? Drop us a line and let's craft something delightful together!",
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color: AppColors.primDarktGrey,
-                height: 1.5,
-              ),
+            color: AppColors.primDarkGrey,
+            height: 1.5,
+          ),
         ),
       ],
     );
@@ -153,14 +159,17 @@ class _ContactScreenState extends State<ContactScreen> {
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: AppColors.primRed1.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(100)
+                  borderRadius: BorderRadius.circular(100),
                 ),
                 child: Icon(icon, color: AppColors.primRed1, size: 24),
               ),
               const SizedBox(width: 14),
               Text(
                 title,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
             ],
           ),
@@ -168,7 +177,7 @@ class _ContactScreenState extends State<ContactScreen> {
           if (subtitle != null)
             Text(
               subtitle,
-              style: TextStyle(color: AppColors.primDarktGrey, fontSize: 12),
+              style: TextStyle(color: AppColors.primDarkGrey, fontSize: 12),
             ),
           Text(
             value,
@@ -249,23 +258,28 @@ class _ContactScreenState extends State<ContactScreen> {
     final List<Map<String, String>> faqs = [
       {
         "q": "What are your opening hours?",
-        "a": "OneMan Kitchen is open from 11:00 AM to 10:00 PM from Monday to Friday, and from 11:00 AM to 11:00 PM on Saturdays and Sundays."
+        "a":
+            "OneMan Kitchen is open from 11:00 AM to 10:00 PM from Monday to Friday, and from 11:00 AM to 11:00 PM on Saturdays and Sundays.",
       },
       {
         "q": "Do you offer home delivery in Kurunegala?",
-        "a": "Yes! We offer fresh and fast delivery within Kurunegala city and suburbs."
+        "a":
+            "Yes! We offer fresh and fast delivery within Kurunegala city and suburbs.",
       },
       {
         "q": "How can I book catering for an event?",
-        "a": "You can send an inquiry through the form below or call our hotline for customized catering packages."
+        "a":
+            "You can send an inquiry through the form below or call our hotline for customized catering packages.",
       },
       {
         "q": "Are your ingredients sourced fresh?",
-        "a": "Absolutely. We savor the taste of premium culinary delights crafted with fresh ingredients daily."
+        "a":
+            "Absolutely. We savor the taste of premium culinary delights crafted with fresh ingredients daily.",
       },
       {
         "q": "Can I reserve a table in advance?",
-        "a": "Yes, table reservations can be made via the form below or by calling us directly."
+        "a":
+            "Yes, table reservations can be made via the form below or by calling us directly.",
       },
     ];
 
@@ -279,39 +293,62 @@ class _ContactScreenState extends State<ContactScreen> {
         const SizedBox(height: 20),
         ...faqs.asMap().entries.map((entry) {
           int idx = entry.key + 1;
-          return Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            decoration: BoxDecoration(
-              color: AppColors.primWhite,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: ExpansionTile(
-              leading: Text(
-                idx.toString().padLeft(2, '0'),
-                style: TextStyle(
-                  color: AppColors.primRed1,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+          return ValueListenableBuilder(
+            valueListenable: openedList,
+            builder: (context, value, child) {
+              return Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color:
+                      openedList.value.contains(idx)
+                          ? AppColors.primRed1.withValues(alpha: 0.3)
+                          : AppColors.primWhite,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              ),
-              title: Text(
-                entry.value["q"]!,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primDark,
-                ),
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                  child: Text(
-                    entry.value["a"]!,
-                    style: TextStyle(color: AppColors.primDarktGrey, fontSize: 13),
+                child: ExpansionTile(
+                  onExpansionChanged: (value) {
+                    if (value) {
+                      print("######## added $value $idx");
+                      openedList.value = [...openedList.value, idx];
+                    } else {
+                      openedList.value = [...openedList.value]..remove(idx);
+                    }
+                  },
+                  leading: Text(
+                    idx.toString().padLeft(2, '0'),
+                    style: TextStyle(
+                      color: AppColors.primRed2,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
+                  title: Text(
+                    entry.value["q"]!,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primDark,
+                    ),
+                  ),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        bottom: 16,
+                      ),
+                      child: Text(
+                        entry.value["a"]!,
+                        style: TextStyle(
+                          color: Colors.grey.shade800,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           );
         }),
       ],
@@ -344,18 +381,21 @@ class _ContactScreenState extends State<ContactScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.primWhite,
                   borderRadius: BorderRadius.circular(kTextFieldBR),
-                  border: Border.all(color: AppColors.primGrey.withValues(alpha: 0.5)),
+                  border: Border.all(
+                    color: AppColors.primGrey.withValues(alpha: 0.5),
+                  ),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: _selectedInquiryType,
                     isExpanded: true,
-                    items: _inquiryTypes.map((String type) {
-                      return DropdownMenuItem<String>(
-                        value: type,
-                        child: Text(type),
-                      );
-                    }).toList(),
+                    items:
+                        _inquiryTypes.map((String type) {
+                          return DropdownMenuItem<String>(
+                            value: type,
+                            child: Text(type),
+                          );
+                        }).toList(),
                     onChanged: (String? newValue) {
                       setState(() {
                         _selectedInquiryType = newValue!;
@@ -394,7 +434,9 @@ class _ContactScreenState extends State<ContactScreen> {
                 onTap: () {
                   if (_formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Inquiry sent successfully!")),
+                      const SnackBar(
+                        content: Text("Inquiry sent successfully!"),
+                      ),
                     );
                   }
                 },
@@ -437,23 +479,33 @@ class _ContactScreenState extends State<ContactScreen> {
       validator: validator,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: AppColors.primGrey, fontSize: 14),
+        hintStyle: TextStyle(color: AppColors.primDarkGrey, fontSize: 14),
         filled: true,
         fillColor: AppColors.primWhite,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(kTextFieldBR),
-          borderSide: BorderSide(color: AppColors.primGrey.withValues(alpha: 0.5)),
+          borderSide: BorderSide(
+            color: AppColors.primGrey.withValues(alpha: 0.5),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(kTextFieldBR),
-          borderSide: BorderSide(color: AppColors.primGrey.withValues(alpha: 0.5)),
+          borderSide: BorderSide(
+            color: AppColors.primGrey.withValues(alpha: 0.5),
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(kTextFieldBR),
           borderSide: const BorderSide(color: AppColors.primRed2),
         ),
       ),
+      onTapOutside: (event) {
+        FocusScope.of(context).unfocus();
+      },
     );
   }
 
@@ -468,19 +520,26 @@ class _ContactScreenState extends State<ContactScreen> {
         ),
         Text(
           "Kurunegala",
-          style: TextStyle(color: AppColors.primRed1, fontWeight: FontWeight.w500),
+          style: TextStyle(
+            color: AppColors.primRed1,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         const SizedBox(height: 24),
         const Text(
           "Savor the taste of premium, state-of-the-art culinary delights crafted with fresh ingredients and extraordinary passion.",
           textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.primDarktGrey, fontSize: 13, height: 1.5),
+          style: TextStyle(
+            color: AppColors.primDarkGrey,
+            fontSize: 13,
+            height: 1.5,
+          ),
         ),
         const SizedBox(height: 40),
         const Text(
           "© 2026 OneMan Kitchen. All rights reserved.\nPowered by Vampior Designs",
           textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.primGrey, fontSize: 11),
+          style: TextStyle(color: AppColors.primDarkGrey, fontSize: 11),
         ),
       ],
     );

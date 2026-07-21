@@ -1,20 +1,21 @@
-# Walkthrough - Contact Screen Implementation
+# Walkthrough - Profile Screen UI Implementation
 
-I have implemented the `ContactScreen` for OneMan Kitchen, using the branding, contact details, FAQs, and business hours provided.
+I have implemented the `ProfileScreen` UI for OneMan Kitchen, featuring user information management and quick account statistics.
 
 ## Changes Made
 
-### Contact Feature
-- **[ContactScreen](file:///D:/Vampior Designs/Projects/One man/oneman/lib/features/contact/screens/contact_screen.dart)**:
-    - **Header Section**: Implemented the "Get in Touch" header with the provided description about reservations and catering.
-    - **Contact Info Cards**: Created modern cards for the Hotline (077 7887755), Email (onemankitchenpvtltd@gmail.com), and Location (Kurunegala).
-    - **Business Hours**: Added a high-contrast card showing Weekday and Weekend operating hours.
-    - **FAQ Section**: Integrated 5 frequently asked questions using `ExpansionTile` for a clean, interactive experience.
-    - **Inquiry Form**: Built a comprehensive form with validation for Name, Inquiry Type (dropdown), Email, and Message.
-    - **Footer Branding**: Added the OneMan Kitchen logo, slogan, and copyright information.
+### Profile Feature
+- **[ProfileScreen](file:///D:/Vampior Designs/Projects/One man/oneman/lib/features/profile/screens/profile_screen.dart)**:
+    - **Header Section**: Added a prominent user avatar with initials "N", followed by the user's name and email.
+    - **Quick Stats Row**: Implemented cards for "My Orders", "My Cart", and "Wishlist" with their respective counts.
+    - **Sign Out**: Integrated a "Sign Out" button with a modern, low-opacity red style.
+    - **Personal Information**:
+        - Built a detailed form containing Full Name, Email, Phone, and Address fields.
+        - Implemented an **Edit Mode** toggle that enables/disables the text fields, allowing users to switch between viewing and editing their details.
+    - **Footer Branding**: Consistent footer with the OneMan Kitchen logo, slogan, and "Powered by Vampior Designs" copyright.
 
 ## Verification Results
-- **Data Accuracy**: All phone numbers, emails, addresses, and hours match the provided input exactly.
-- **Form Functionality**: The inquiry form includes validation and shows a success snackbar upon submission.
-- **UI Consistency**: Used `AppColors`, `kMainPadding`, and `kTextFieldBR` to ensure the screen fits perfectly with the rest of the application's design.
-- **User Experience**: The FAQ section uses collapsible tiles to save space, and the scroll physics are set to `BouncingScrollPhysics` for a premium feel.
+- **Data Fidelity**: All user details (Neluminda Pavith, 0764790709, etc.) match the provided requirements.
+- **Interactivity**: The "Edit Details" button correctly toggles field editability, and the "Sign Out" button triggers UI feedback.
+- **Design Consistency**: Used `AppColors.primDarkGrey` and existing constants like `kMainPadding` and `kTextFieldBR` to maintain a unified look across the app.
+- **Mobile Optimized**: The screen uses `SingleChildScrollView` with `BouncingScrollPhysics` for smooth navigation on all device sizes.
